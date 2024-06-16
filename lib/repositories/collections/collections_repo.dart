@@ -50,4 +50,20 @@ class CollectionsRepo {
       return Collection(File(collectionPath));
     }
   }
+
+  /// deletes a collection from the collection path
+  Future<void> deleteCollection(Collection collection) async {
+    final collectionFile = File(collection.filePath);
+    final exists = await collectionFile.exists();
+
+    // if the file doesn't exist
+    if (!exists) {
+      Preferences.removeCollectionPath(collection.filePath);
+      return;
+    }
+
+    // if the file exists
+    await collectionFile.delete();
+    await Preferences.removeCollectionPath(collection.filePath);
+  }
 }

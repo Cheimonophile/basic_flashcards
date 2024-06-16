@@ -7,6 +7,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppLoadEvent>(_onAppLoadEvent);
     on<AppNewCollectionEvent>(_onAppNewCollectionEvent);
     on<AppOpenCollectionEvent>(_onAppOpenCollectionEvent);
+    on<AppDeleteCollectionEvent>(_onAppDeleteCollectionEvent);
 
     // load the app event
     add(AppLoadEvent());
@@ -40,6 +41,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       return;
     }
     await collectionsRepo.readCollection(collectionPath);
+    final List<Collection> collections =
+        await collectionsRepo.readCollections();
+    emit(AppState.withCollections(collections));
+  }
+
+  /// Event handler for delete collection event
+  void _onAppDeleteCollectionEvent(
+      AppDeleteCollectionEvent event, Emitter<AppState> emit) async {
+    await collectionsRepo.deleteCollection(event.collection);
     final List<Collection> collections =
         await collectionsRepo.readCollections();
     emit(AppState.withCollections(collections));

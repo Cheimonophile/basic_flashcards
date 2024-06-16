@@ -1,3 +1,4 @@
+import 'package:basic_flashcards/types/data/collection.dart';
 import 'package:basic_flashcards/types/widgets/screen.dart';
 import 'package:basic_flashcards/view/app/app.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,11 @@ class Home extends Screen {
     BlocProvider.of<AppBloc>(context).add(AppOpenCollectionEvent());
   }
 
+  /// when the delete collection button is pressed
+  _onPressedDeleteCollection(BuildContext context, Collection collection) {
+    BlocProvider.of<AppBloc>(context).add(AppDeleteCollectionEvent(collection));
+  }
+
   @override
   Scaffold build(BuildContext context) {
     return Scaffold(
@@ -23,8 +29,7 @@ class Home extends Screen {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Home Page"),
       ),
-      body: BlocBuilder<AppBloc, AppState>(
-          builder: (BuildContext context, AppState state) {
+      body: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
         // If the app is loading, show a loading indicator
         if (state is AppLoadingState) {
           return const Center(
@@ -79,7 +84,8 @@ class Home extends Screen {
                                 subtitle: Text(collection.filePath),
                                 trailing: IconButton(
                                     icon: const Icon(Icons.delete),
-                                    onPressed: () => {}),
+                                    onPressed: () => _onPressedDeleteCollection(
+                                        context, collection)),
                               ))
                           .toList(),
                     ),

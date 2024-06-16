@@ -8,3 +8,9 @@ final class AppLoadEvent extends AppEvent {}
 final class AppNewCollectionEvent extends AppEvent {}
 
 final class AppOpenCollectionEvent extends AppEvent {}
+
+final class AppDeleteCollectionEvent extends AppEvent {
+  final Collection collection;
+
+  AppDeleteCollectionEvent(this.collection);
+}
