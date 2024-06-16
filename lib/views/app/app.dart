@@ -12,7 +12,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Basic Flashcards',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlueAccent),
         useMaterial3: true,
       ),
       home: MultiBlocProvider(
