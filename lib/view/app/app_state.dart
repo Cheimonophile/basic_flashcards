@@ -5,9 +5,7 @@ sealed class AppState {
 
   static AppState error() => AppErrorState._();
 
-  static AppState withoutDb() => AppLoadedState._(dbUri: null);
-
-  static AppState withDb(String dbUri) => AppLoadedState._(dbUri: dbUri);
+  static AppState withCollections(List<String> collectionPaths) => AppLoadedState._(collectionPaths: collectionPaths);
 
   bool get isLoading => this is AppLoadingState;
 }
@@ -21,7 +19,7 @@ final class AppErrorState extends AppState {
 }
 
 final class AppLoadedState extends AppState {
-  AppLoadedState._({required this.dbUri}) : super();
+  AppLoadedState._({required this.collectionPaths}) : super();
 
-  final String? dbUri;
+  final List<String> collectionPaths;
 }

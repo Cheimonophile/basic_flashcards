@@ -10,12 +10,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   /// Event handler for load event
   void _onAppLoadEvent(AppLoadEvent event, Emitter<AppState> emit) async {
-    final String? dbUri = await Preferences.dbUri;
-    if (dbUri == null) {
-      emit(AppState.withoutDb());
-    }
-    else {
-      emit(AppState.withDb(dbUri));
-    }
+    final List<String> collectionPaths = await Preferences.collectionPaths;
+    emit(AppState.withCollections(collectionPaths));
   }
 }
