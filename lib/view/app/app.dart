@@ -1,4 +1,5 @@
-import 'package:basic_flashcards/preferences.dart';
+import 'package:basic_flashcards/repositories/collections/collections_repo.dart';
+import 'package:basic_flashcards/types/data/collection.dart';
 import 'package:basic_flashcards/utils/file_picker.dart';
 import 'package:basic_flashcards/view/screens/home/home.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,8 @@
 part of 'app.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
+  final CollectionsRepo collectionsRepo = CollectionsRepo();
+
   AppBloc() : super(AppState.loading()) {
     on<AppLoadEvent>(_onAppLoadEvent);
     on<AppNewCollectionEvent>(_onAppNewCollectionEvent);
@@ -12,8 +14,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   /// Event handler for load event
   void _onAppLoadEvent(AppLoadEvent event, Emitter<AppState> emit) async {
-    final List<String> collectionPaths = await Preferences.collectionPaths;
-    emit(AppState.withCollections(collectionPaths));
+    final List<Collection> collections =
+        await collectionsRepo.readCollections();
+    emit(AppState.withCollections(collections));
   }
 
   /// Event handler for add collection event
@@ -23,9 +26,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     if (newCollectionPath == null) {
       return;
     }
-    await Preferences.addCollectionPath(newCollectionPath);
-    final List<String> collectionPath = await Preferences.collectionPaths;
-    emit(AppState.withCollections(collectionPath));
+    await collectionsRepo.createCollection(newCollectionPath);
+    final List<Collection> collections =
+        await collectionsRepo.readCollections();
+    emit(AppState.withCollections(collections));
   }
 
   /// Event handler for open collection event
@@ -35,8 +39,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     if (collectionPath == null) {
       return;
     }
-    await Preferences.addCollectionPath(collectionPath);
-    final List<String> collectionPaths = await Preferences.collectionPaths;
-    emit(AppState.withCollections(collectionPaths));
+    await collectionsRepo.readCollection(collectionPath);
+    final List<Collection> collections =
+        await collectionsRepo.readCollections();
+    emit(AppState.withCollections(collections));
   }
 }

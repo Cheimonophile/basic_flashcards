@@ -74,12 +74,12 @@ class Home extends Screen {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: ListView(
-                      children: state.collectionPaths
-                          .map((String collectionPath) => ListTile(
+                      children: state.collections
+                          .map((collection) => ListTile(
                                 onTap: () {},
                                 title: Text(
-                                    File(collectionPath).uri.pathSegments.last),
-                                subtitle: Text(collectionPath),
+                                    File(collection.path).uri.pathSegments.last),
+                                subtitle: Text(collection.path),
                                 trailing: IconButton(
                                     icon: const Icon(Icons.delete),
                                     onPressed: () => {}),
