@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:basic_flashcards/preferences.dart';
+import 'package:basic_flashcards/sources/preferences.dart';
 import 'package:basic_flashcards/types/data/collection.dart';
 
 class CollectionsRepo {
