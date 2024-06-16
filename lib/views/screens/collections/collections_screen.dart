@@ -1,25 +1,25 @@
+import 'package:basic_flashcards/blocs/data/collections/collections_bloc.dart';
 import 'package:basic_flashcards/types/data/collection.dart';
 import 'package:basic_flashcards/types/widgets/screen.dart';
-import 'package:basic_flashcards/view/app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Home extends Screen {
-  const Home({super.key});
+class CollectionsScreen extends Screen {
+  const CollectionsScreen({super.key});
 
   /// when the new collection button is pressed
   _onPressedNewCollection(BuildContext context) {
-    BlocProvider.of<AppBloc>(context).add(AppNewCollectionEvent());
+    BlocProvider.of<CollectionsBloc>(context).add(CollectionsNewCollectionEvent());
   }
 
   /// when the open collection button is pressed
   _onPressedOpenCollection(BuildContext context) {
-    BlocProvider.of<AppBloc>(context).add(AppOpenCollectionEvent());
+    BlocProvider.of<CollectionsBloc>(context).add(CollectionsOpenCollectionEvent());
   }
 
   /// when the delete collection button is pressed
   _onPressedDeleteCollection(BuildContext context, Collection collection) {
-    BlocProvider.of<AppBloc>(context).add(AppDeleteCollectionEvent(collection));
+    BlocProvider.of<CollectionsBloc>(context).add(CollectionsDeleteCollectionEvent(collection));
   }
 
   @override
@@ -29,23 +29,23 @@ class Home extends Screen {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Home Page"),
       ),
-      body: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
+      body: BlocBuilder<CollectionsBloc, CollectionsState>(builder: (context, state) {
         // If the app is loading, show a loading indicator
-        if (state is AppLoadingState) {
+        if (state is CollectionsLoadingState) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
 
         // if the app is in an error state, show an error message
-        if (state is AppErrorState) {
+        if (state is CollectionsErrorState) {
           return const Center(
             child: Text("An error occurred"),
           );
         }
 
         // if the app is in loaded state
-        if (state is AppLoadedState) {
+        if (state is CollectionsLoadedState) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -80,6 +80,9 @@ class Home extends Screen {
                       children: state.collections
                           .map((collection) => ListTile(
                                 onTap: () {},
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
                                 title: Text(collection.fileName),
                                 subtitle: Text(collection.filePath),
                                 trailing: IconButton(
