@@ -1,26 +1,35 @@
-
-
-
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Get user preferences for the app
 sealed class Preferences {
+  /// The key for the dbUris in the user preferences
+  static const String dbUrisKey = 'dbUris';
 
-  /// Get the dbUri of the sqlite database
+  /// Gets the db uris from the prefs
+  static List<String> _getDbUrisFromPrefs(SharedPreferences prefs) =>
+      prefs.getStringList(dbUrisKey) ?? [];
+
+  /// Get the dbUri of the current collection
   static Future<String?> get dbUri async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? dbUri = prefs.getString('dbUri');
+    final List<String> dbUris = _getDbUrisFromPrefs(prefs);
+    final String? dbUri = dbUris.firstOrNull;
     return dbUri;
   }
 
-  /// Set the db uri
-  static Future<bool> setDbUri(String? dbUri) async {
+  /// Get the actively stored dbUris
+  static Future<List<String>> get dbUris async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (dbUri == null) {
-      return prefs.remove('dbUri');
-    }
-    else {
-      return prefs.setString('dbUri', dbUri);
-    }
+    final List<String> dbUris = _getDbUrisFromPrefs(prefs);
+    return dbUris;
   }
 
+  /// add a db uri
+  static Future<bool> addDbUri(String dbUri) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final List<String> dbUris = _getDbUrisFromPrefs(prefs);
+    dbUris.remove(dbUri);
+    dbUris.insert(0, dbUri);
+    return prefs.setStringList(dbUrisKey, dbUris);
+  }
 }
