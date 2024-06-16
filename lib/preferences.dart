@@ -29,12 +29,16 @@ sealed class Preferences {
   }
 
   /// add a collection path
-  static Future<bool> addCollectionPath(String collectionPath) async {
+  static Future<void> addCollectionPath(String collectionPath) async {
     final SharedPreferences prefs = await _prefs;
     final List<String> collectionPaths = _getCollectionPathsFromPrefs(prefs);
     collectionPaths.remove(collectionPath);
     collectionPaths.insert(0, collectionPath);
-    return prefs.setStringList(collectionPathsKey, collectionPaths);
+    bool result =
+        await prefs.setStringList(collectionPathsKey, collectionPaths);
+    if (!result) {
+      throw Exception('Failed to add collection path');
+    }
   }
 
   /// Remove a collection path
