@@ -1,8 +1,12 @@
-
+import 'dart:io';
 
 /// Represents a single collection of cards
 class Collection {
-  final String path;
+  final File _file;
 
-  Collection(this.path);
+  Collection(this._file);
+
+  String get filePath => _file.path;
+
+  String get fileName => _file.uri.pathSegments.last;
 }

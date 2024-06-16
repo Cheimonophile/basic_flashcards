@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:basic_flashcards/types/widgets/screen.dart';
 import 'package:basic_flashcards/view/app/app.dart';
 import 'package:flutter/material.dart';
@@ -77,9 +75,8 @@ class Home extends Screen {
                       children: state.collections
                           .map((collection) => ListTile(
                                 onTap: () {},
-                                title: Text(
-                                    File(collection.path).uri.pathSegments.last),
-                                subtitle: Text(collection.path),
+                                title: Text(collection.fileName),
+                                subtitle: Text(collection.filePath),
                                 trailing: IconButton(
                                     icon: const Icon(Icons.delete),
                                     onPressed: () => {}),

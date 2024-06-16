@@ -15,24 +15,24 @@ class CollectionsRepo {
 
   /// makes a new collection file and retuns the collection object
   Future<Collection> createCollection(String collectionPath) async {
-    final file = File(collectionPath);
-    await file.create();
+    final collectionFile = File(collectionPath);
+    await collectionFile.create();
     await Preferences.addCollectionPath(collectionPath);
-    return Collection(collectionPath);
+    return Collection(collectionFile);
   }
 
   /// reads the collections from the collection paths
   Future<List<Collection>> readCollections() async {
     final collectionPaths = await Preferences.collectionPaths;
     final collections =
-        collectionPaths.map((path) => Collection(path)).toList();
+        collectionPaths.map((path) => Collection(File(path))).toList();
     return collections;
   }
 
   /// reads a collection from a collection path
   ///
   /// moves the collection to the ront of the list
-  /// 
+  ///
   /// returns null if the collection doesn't exist
   Future<Collection?> readCollection(String collectionPath) async {
     final collectionFile = File(collectionPath);
@@ -47,7 +47,7 @@ class CollectionsRepo {
     // if the file exists
     else {
       await Preferences.addCollectionPath(collectionPath);
-      return Collection(collectionPath);
+      return Collection(File(collectionPath));
     }
   }
 }
