@@ -1,5 +1,5 @@
 import 'package:basic_flashcards/blocs/data/collections/collections_bloc.dart';
-import 'package:basic_flashcards/views/screens/collections/collections_screen.dart';
+import 'package:basic_flashcards/views/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,7 +21,7 @@ class App extends StatelessWidget {
             create: (_) => CollectionsBloc(),
           ),
         ],
-        child: const CollectionsScreen(),
+        child: const HomeScreen(),
       ),
     );
   }

@@ -6,8 +6,8 @@ import 'package:basic_flashcards/views/screens/collection/collection_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CollectionsScreen extends Screen {
-  const CollectionsScreen({super.key});
+class HomeScreen extends Screen {
+  const HomeScreen({super.key});
 
   /// when the new collection button is pressed
   _onPressedNewCollection(BuildContext context) async {
