@@ -9,17 +9,18 @@ class CollectionsScreen extends Screen {
 
   /// when the new collection button is pressed
   _onPressedNewCollection(BuildContext context) {
-    BlocProvider.of<CollectionsBloc>(context).add(CollectionsNewCollectionEvent());
+    BlocProvider.of<CollectionsBloc>(context).add(NewCollectionsEvent());
   }
 
   /// when the open collection button is pressed
   _onPressedOpenCollection(BuildContext context) {
-    BlocProvider.of<CollectionsBloc>(context).add(CollectionsOpenCollectionEvent());
+    BlocProvider.of<CollectionsBloc>(context).add(OpenCollectionsEvent());
   }
 
   /// when the delete collection button is pressed
   _onPressedDeleteCollection(BuildContext context, Collection collection) {
-    BlocProvider.of<CollectionsBloc>(context).add(CollectionsDeleteCollectionEvent(collection));
+    BlocProvider.of<CollectionsBloc>(context)
+        .add(DeleteCollectionsEvent(collection));
   }
 
   @override
@@ -29,23 +30,17 @@ class CollectionsScreen extends Screen {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Home Page"),
       ),
-      body: BlocBuilder<CollectionsBloc, CollectionsState>(builder: (context, state) {
+      body: BlocBuilder<CollectionsBloc, CollectionsState>(
+          builder: (context, state) {
         // If the app is loading, show a loading indicator
-        if (state is CollectionsLoadingState) {
+        if (state is LoadingCollectionsState) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
 
-        // if the app is in an error state, show an error message
-        if (state is CollectionsErrorState) {
-          return const Center(
-            child: Text("An error occurred"),
-          );
-        }
-
         // if the app is in loaded state
-        if (state is CollectionsLoadedState) {
+        if (state is LoadedCollectionsState) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(

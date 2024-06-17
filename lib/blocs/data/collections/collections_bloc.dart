@@ -10,54 +10,51 @@ class CollectionsBloc extends Bloc<CollectionsEvent, CollectionsState> {
   final CollectionsRepo collectionsRepo = CollectionsRepo();
 
   CollectionsBloc() : super(CollectionsState.loading()) {
-    on<CollectionsLoadEvent>(_onCollectionsLoadEvent);
-    on<CollectionsNewCollectionEvent>(_onCollectionsNewCollectionEvent);
-    on<CollectionsOpenCollectionEvent>(_onCollectionsOpenCollectionEvent);
-    on<CollectionsDeleteCollectionEvent>(_onCollectionsDeleteCollectionEvent);
+    on<LoadCollectionsEvent>(_onCollectionsLoadEvent);
+    on<NewCollectionsEvent>(_onCollectionsNewCollectionEvent);
+    on<OpenCollectionsEvent>(_onCollectionsOpenCollectionEvent);
+    on<DeleteCollectionsEvent>(_onCollectionsDeleteCollectionEvent);
 
     // load the app event
-    add(CollectionsLoadEvent());
+    add(LoadCollectionsEvent());
   }
 
   /// Event handler for load event
-  void _onCollectionsLoadEvent(CollectionsLoadEvent event, Emitter<CollectionsState> emit) async {
-    final List<Collection> collections =
-        await collectionsRepo.reads();
+  void _onCollectionsLoadEvent(
+      LoadCollectionsEvent event, Emitter<CollectionsState> emit) async {
+    final List<Collection> collections = await collectionsRepo.reads();
     emit(CollectionsState.withCollections(collections));
   }
 
   /// Event handler for add collection event
   void _onCollectionsNewCollectionEvent(
-      CollectionsNewCollectionEvent event, Emitter<CollectionsState> emit) async {
+      NewCollectionsEvent event, Emitter<CollectionsState> emit) async {
     String? newCollectionPath = await newCollection();
     if (newCollectionPath == null) {
       return;
     }
     await collectionsRepo.create(newCollectionPath);
-    final List<Collection> collections =
-        await collectionsRepo.reads();
+    final List<Collection> collections = await collectionsRepo.reads();
     emit(CollectionsState.withCollections(collections));
   }
 
   /// Event handler for open collection event
   void _onCollectionsOpenCollectionEvent(
-      CollectionsOpenCollectionEvent event, Emitter<CollectionsState> emit) async {
+      OpenCollectionsEvent event, Emitter<CollectionsState> emit) async {
     String? collectionPath = await openCollection();
     if (collectionPath == null) {
       return;
     }
     await collectionsRepo.read(collectionPath);
-    final List<Collection> collections =
-        await collectionsRepo.reads();
+    final List<Collection> collections = await collectionsRepo.reads();
     emit(CollectionsState.withCollections(collections));
   }
 
   /// Event handler for delete collection event
   void _onCollectionsDeleteCollectionEvent(
-      CollectionsDeleteCollectionEvent event, Emitter<CollectionsState> emit) async {
+      DeleteCollectionsEvent event, Emitter<CollectionsState> emit) async {
     await collectionsRepo.delete(event.collection);
-    final List<Collection> collections =
-        await collectionsRepo.reads();
+    final List<Collection> collections = await collectionsRepo.reads();
     emit(CollectionsState.withCollections(collections));
   }
 }
