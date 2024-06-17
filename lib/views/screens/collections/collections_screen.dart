@@ -19,8 +19,28 @@ class CollectionsScreen extends Screen {
 
   /// when the delete collection button is pressed
   _onPressedDeleteCollection(BuildContext context, Collection collection) {
-    BlocProvider.of<CollectionsBloc>(context)
-        .add(DeleteCollectionsEvent(collection));
+    final collectionsBlock = BlocProvider.of<CollectionsBloc>(context);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Delete Collection"),
+        content:
+            Text("Are you sure you want to delete ${collection.fileName}?"),
+        actions: [
+          TextButton(
+            child: const Text("Cancel"),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          TextButton(
+            child: const Text("Delete"),
+            onPressed: () {
+              Navigator.of(context).pop(true);
+              collectionsBlock.add(DeleteCollectionsEvent(collection));
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
