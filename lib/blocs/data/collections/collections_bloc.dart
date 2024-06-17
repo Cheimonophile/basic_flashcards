@@ -1,6 +1,5 @@
 import 'package:basic_flashcards/repos/collections/collections_repo.dart';
 import 'package:basic_flashcards/types/data/collection.dart';
-import 'package:basic_flashcards/utils/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'collections_event.dart';
@@ -10,48 +9,40 @@ class CollectionsBloc extends Bloc<CollectionsEvent, CollectionsState> {
   final CollectionsRepo collectionsRepo = CollectionsRepo();
 
   CollectionsBloc() : super(CollectionsState.loading()) {
-    on<LoadCollectionsEvent>(_onCollectionsLoadEvent);
-    on<NewCollectionsEvent>(_onCollectionsNewCollectionEvent);
-    on<OpenCollectionsEvent>(_onCollectionsOpenCollectionEvent);
-    on<DeleteCollectionsEvent>(_onCollectionsDeleteCollectionEvent);
+    on<LoadCollectionsEvent>(_onLoadCollectionsEvent);
+    on<NewCollectionsEvent>(_onNewCollectionsEvent);
+    on<OpenCollectionsEvent>(_onOpenCollectionsEvent);
+    on<DeleteCollectionsEvent>(_onDeleteCollectionsEvent);
 
     // load the app event
     add(LoadCollectionsEvent());
   }
 
   /// Event handler for load event
-  void _onCollectionsLoadEvent(
+  void _onLoadCollectionsEvent(
       LoadCollectionsEvent event, Emitter<CollectionsState> emit) async {
     final List<Collection> collections = await collectionsRepo.reads();
     emit(CollectionsState.withCollections(collections));
   }
 
   /// Event handler for add collection event
-  void _onCollectionsNewCollectionEvent(
+  void _onNewCollectionsEvent(
       NewCollectionsEvent event, Emitter<CollectionsState> emit) async {
-    String? newCollectionPath = await newCollection();
-    if (newCollectionPath == null) {
-      return;
-    }
-    await collectionsRepo.create(newCollectionPath);
+    await collectionsRepo.create(event.collectionPath);
     final List<Collection> collections = await collectionsRepo.reads();
     emit(CollectionsState.withCollections(collections));
   }
 
   /// Event handler for open collection event
-  void _onCollectionsOpenCollectionEvent(
+  void _onOpenCollectionsEvent(
       OpenCollectionsEvent event, Emitter<CollectionsState> emit) async {
-    String? collectionPath = await openCollection();
-    if (collectionPath == null) {
-      return;
-    }
-    await collectionsRepo.read(collectionPath);
+    await collectionsRepo.read(event.collectionPath);
     final List<Collection> collections = await collectionsRepo.reads();
     emit(CollectionsState.withCollections(collections));
   }
 
   /// Event handler for delete collection event
-  void _onCollectionsDeleteCollectionEvent(
+  void _onDeleteCollectionsEvent(
       DeleteCollectionsEvent event, Emitter<CollectionsState> emit) async {
     await collectionsRepo.delete(event.collection);
     final List<Collection> collections = await collectionsRepo.reads();

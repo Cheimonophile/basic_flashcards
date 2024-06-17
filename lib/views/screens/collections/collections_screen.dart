@@ -1,6 +1,7 @@
 import 'package:basic_flashcards/blocs/data/collections/collections_bloc.dart';
 import 'package:basic_flashcards/types/data/collection.dart';
 import 'package:basic_flashcards/types/widgets/screen.dart';
+import 'package:basic_flashcards/utils/file_picker.dart';
 import 'package:basic_flashcards/views/screens/collection/collection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,13 +10,21 @@ class CollectionsScreen extends Screen {
   const CollectionsScreen({super.key});
 
   /// when the new collection button is pressed
-  _onPressedNewCollection(BuildContext context) {
-    BlocProvider.of<CollectionsBloc>(context).add(NewCollectionsEvent());
+  _onPressedNewCollection(BuildContext context) async {
+    String? newCollectionPath = await newCollection();
+    if (newCollectionPath == null) return;
+    if (!context.mounted) return;
+    BlocProvider.of<CollectionsBloc>(context)
+        .add(NewCollectionsEvent(newCollectionPath));
   }
 
   /// when the open collection button is pressed
-  _onPressedOpenCollection(BuildContext context) {
-    BlocProvider.of<CollectionsBloc>(context).add(OpenCollectionsEvent());
+  _onPressedOpenCollection(BuildContext context) async {
+    String? collectionPath = await openCollection();
+    if (collectionPath == null) return;
+    if (!context.mounted) return;
+    BlocProvider.of<CollectionsBloc>(context)
+        .add(OpenCollectionsEvent(collectionPath));
   }
 
   /// when the delete collection button is pressed
@@ -49,6 +58,8 @@ class CollectionsScreen extends Screen {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => CollectionScreen(collection),
     ));
+    BlocProvider.of<CollectionsBloc>(context)
+        .add(OpenCollectionsEvent(collection.filePath));
   }
 
   @override
