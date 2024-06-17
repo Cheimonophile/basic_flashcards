@@ -47,7 +47,7 @@ class CollectionsScreen extends Screen {
   /// navigate to the collection screen
   _navigateToCollectionScreen(BuildContext context, Collection collection) {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => CollectionScreen(collection: collection),
+      builder: (context) => CollectionScreen(collection),
     ));
   }
 
