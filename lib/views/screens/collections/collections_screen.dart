@@ -1,6 +1,8 @@
 import 'package:basic_flashcards/blocs/data/collections/collections_bloc.dart';
 import 'package:basic_flashcards/types/data/collection.dart';
 import 'package:basic_flashcards/types/widgets/screen.dart';
+import 'package:basic_flashcards/utils/file_picker.dart';
+import 'package:basic_flashcards/views/screens/collection/collection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,18 +10,56 @@ class CollectionsScreen extends Screen {
   const CollectionsScreen({super.key});
 
   /// when the new collection button is pressed
-  _onPressedNewCollection(BuildContext context) {
-    BlocProvider.of<CollectionsBloc>(context).add(CollectionsNewCollectionEvent());
+  _onPressedNewCollection(BuildContext context) async {
+    String? newCollectionPath = await newCollection();
+    if (newCollectionPath == null) return;
+    if (!context.mounted) return;
+    BlocProvider.of<CollectionsBloc>(context)
+        .add(NewCollectionsEvent(newCollectionPath));
   }
 
   /// when the open collection button is pressed
-  _onPressedOpenCollection(BuildContext context) {
-    BlocProvider.of<CollectionsBloc>(context).add(CollectionsOpenCollectionEvent());
+  _onPressedOpenCollection(BuildContext context) async {
+    String? collectionPath = await openCollection();
+    if (collectionPath == null) return;
+    if (!context.mounted) return;
+    BlocProvider.of<CollectionsBloc>(context)
+        .add(OpenCollectionsEvent(collectionPath));
   }
 
   /// when the delete collection button is pressed
   _onPressedDeleteCollection(BuildContext context, Collection collection) {
-    BlocProvider.of<CollectionsBloc>(context).add(CollectionsDeleteCollectionEvent(collection));
+    final collectionsBlock = BlocProvider.of<CollectionsBloc>(context);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Delete Collection"),
+        content:
+            Text("Are you sure you want to delete ${collection.fileName}?"),
+        actions: [
+          TextButton(
+            child: const Text("Cancel"),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          TextButton(
+            child: const Text("Delete"),
+            onPressed: () {
+              Navigator.of(context).pop(true);
+              collectionsBlock.add(DeleteCollectionsEvent(collection));
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// navigate to the collection screen
+  _navigateToCollectionScreen(BuildContext context, Collection collection) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => CollectionScreen(collection),
+    ));
+    BlocProvider.of<CollectionsBloc>(context)
+        .add(OpenCollectionsEvent(collection.filePath));
   }
 
   @override
@@ -29,23 +69,17 @@ class CollectionsScreen extends Screen {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Home Page"),
       ),
-      body: BlocBuilder<CollectionsBloc, CollectionsState>(builder: (context, state) {
+      body: BlocBuilder<CollectionsBloc, CollectionsState>(
+          builder: (context, state) {
         // If the app is loading, show a loading indicator
-        if (state is CollectionsLoadingState) {
+        if (state is LoadingCollectionsState) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
 
-        // if the app is in an error state, show an error message
-        if (state is CollectionsErrorState) {
-          return const Center(
-            child: Text("An error occurred"),
-          );
-        }
-
         // if the app is in loaded state
-        if (state is CollectionsLoadedState) {
+        if (state is LoadedCollectionsState) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -79,7 +113,8 @@ class CollectionsScreen extends Screen {
                     child: ListView(
                       children: state.collections
                           .map((collection) => ListTile(
-                                onTap: () {},
+                                onTap: () => _navigateToCollectionScreen(
+                                    context, collection),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),

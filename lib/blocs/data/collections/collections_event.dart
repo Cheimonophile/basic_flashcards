@@ -3,14 +3,25 @@ part of 'collections_bloc.dart';
 sealed class CollectionsEvent {}
 
 /// event for first loading the class
-final class CollectionsLoadEvent extends CollectionsEvent {}
+final class LoadCollectionsEvent extends CollectionsEvent {}
 
-final class CollectionsNewCollectionEvent extends CollectionsEvent {}
+/// call the event to create a new collection
+final class NewCollectionsEvent extends CollectionsEvent {
+  final String collectionPath;
 
-final class CollectionsOpenCollectionEvent extends CollectionsEvent {}
+  NewCollectionsEvent(this.collectionPath);
+}
 
-final class CollectionsDeleteCollectionEvent extends CollectionsEvent {
+/// call the event to open a collection
+final class OpenCollectionsEvent extends CollectionsEvent {
+  final String collectionPath;
+
+  OpenCollectionsEvent(this.collectionPath);
+}
+
+/// call the event to delete a collection
+final class DeleteCollectionsEvent extends CollectionsEvent {
   final Collection collection;
 
-  CollectionsDeleteCollectionEvent(this.collection);
+  DeleteCollectionsEvent(this.collection);
 }
