@@ -17,7 +17,8 @@ final List<Migration> collection_migrations = [
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL
         );
-
+      ''');
+      await txn.execute('''
         CREATE TABLE card (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           deck_id INTEGER NOT NULL,

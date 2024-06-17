@@ -1,32 +1,32 @@
 import 'dart:io';
 
 import 'package:basic_flashcards/sources/preferences.dart';
+import 'package:basic_flashcards/sources/sqlite/collections/collection_db.dart';
 import 'package:basic_flashcards/types/data/collection.dart';
 
 class CollectionsRepo {
-  static CollectionsRepo? _internal;
-
-  factory CollectionsRepo() {
-    _internal ??= CollectionsRepo._();
-    return _internal!;
-  }
-
   CollectionsRepo._();
 
-  /// makes a new collection file and retuns the collection object
-  Future<Collection> createCollection(String collectionPath) async {
-    final collectionFile = File(collectionPath);
-    await collectionFile.create();
-    await Preferences.addCollectionPath(collectionPath);
-    return Collection(collectionFile);
+  /// singleton instance
+  static CollectionsRepo? _singleton;
+
+  /// singleton factory
+  factory CollectionsRepo() {
+    _singleton ??= CollectionsRepo._();
+    return _singleton!;
   }
 
-  /// reads the collections from the collection paths
-  Future<List<Collection>> readCollections() async {
-    final collectionPaths = await Preferences.collectionPaths;
-    final collections =
-        collectionPaths.map((path) => Collection(File(path))).toList();
-    return collections;
+  /// collection database dao
+  final CollectionDbDao collectionDbDao = CollectionDbDao();
+
+  /// makes a new collection file and retuns the collection object
+  Future<Collection?> create(String collectionPath) async {
+    final collectionDb = await collectionDbDao.create(collectionPath);
+    if (collectionDb == null) {
+      return null;
+    }
+    await Preferences.addCollectionPath(collectionPath);
+    return Collection(File(collectionPath));
   }
 
   /// reads a collection from a collection path
@@ -34,12 +34,11 @@ class CollectionsRepo {
   /// moves the collection to the ront of the list
   ///
   /// returns null if the collection doesn't exist
-  Future<Collection?> readCollection(String collectionPath) async {
-    final collectionFile = File(collectionPath);
-    final exists = await collectionFile.exists();
+  Future<Collection?> read(String collectionPath) async {
+    final collectionDb = await collectionDbDao.read(collectionPath);
 
     // if the file doesn't exist
-    if (!exists) {
+    if (collectionDb == null) {
       Preferences.removeCollectionPath(collectionPath);
       return null;
     }
@@ -51,19 +50,19 @@ class CollectionsRepo {
     }
   }
 
+  /// reads the collections from the collection paths
+  Future<List<Collection>> reads() async {
+    final collectionPaths = await Preferences.collectionPaths;
+    final collections =
+        collectionPaths.map((path) => Collection(File(path))).toList();
+    return collections;
+  }
+
+  
+
   /// deletes a collection from the collection path
-  Future<void> deleteCollection(Collection collection) async {
-    final collectionFile = File(collection.filePath);
-    final exists = await collectionFile.exists();
-
-    // if the file doesn't exist
-    if (!exists) {
-      Preferences.removeCollectionPath(collection.filePath);
-      return;
-    }
-
-    // if the file exists
-    await collectionFile.delete();
+  Future<void> delete(Collection collection) async {
+    await collectionDbDao.delete(collection.filePath);
     await Preferences.removeCollectionPath(collection.filePath);
   }
 }

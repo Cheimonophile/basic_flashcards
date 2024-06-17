@@ -22,7 +22,7 @@ class CollectionsBloc extends Bloc<CollectionsEvent, CollectionsState> {
   /// Event handler for load event
   void _onCollectionsLoadEvent(CollectionsLoadEvent event, Emitter<CollectionsState> emit) async {
     final List<Collection> collections =
-        await collectionsRepo.readCollections();
+        await collectionsRepo.reads();
     emit(CollectionsState.withCollections(collections));
   }
 
@@ -33,9 +33,9 @@ class CollectionsBloc extends Bloc<CollectionsEvent, CollectionsState> {
     if (newCollectionPath == null) {
       return;
     }
-    await collectionsRepo.createCollection(newCollectionPath);
+    await collectionsRepo.create(newCollectionPath);
     final List<Collection> collections =
-        await collectionsRepo.readCollections();
+        await collectionsRepo.reads();
     emit(CollectionsState.withCollections(collections));
   }
 
@@ -46,18 +46,18 @@ class CollectionsBloc extends Bloc<CollectionsEvent, CollectionsState> {
     if (collectionPath == null) {
       return;
     }
-    await collectionsRepo.readCollection(collectionPath);
+    await collectionsRepo.read(collectionPath);
     final List<Collection> collections =
-        await collectionsRepo.readCollections();
+        await collectionsRepo.reads();
     emit(CollectionsState.withCollections(collections));
   }
 
   /// Event handler for delete collection event
   void _onCollectionsDeleteCollectionEvent(
       CollectionsDeleteCollectionEvent event, Emitter<CollectionsState> emit) async {
-    await collectionsRepo.deleteCollection(event.collection);
+    await collectionsRepo.delete(event.collection);
     final List<Collection> collections =
-        await collectionsRepo.readCollections();
+        await collectionsRepo.reads();
     emit(CollectionsState.withCollections(collections));
   }
 }
