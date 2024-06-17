@@ -1,6 +1,7 @@
 import 'package:basic_flashcards/blocs/data/collections/collections_bloc.dart';
 import 'package:basic_flashcards/types/data/collection.dart';
 import 'package:basic_flashcards/types/widgets/screen.dart';
+import 'package:basic_flashcards/views/screens/collection/collection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,6 +42,13 @@ class CollectionsScreen extends Screen {
         ],
       ),
     );
+  }
+
+  /// navigate to the collection screen
+  _navigateToCollectionScreen(BuildContext context, Collection collection) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => CollectionScreen(collection: collection),
+    ));
   }
 
   @override
@@ -94,7 +102,8 @@ class CollectionsScreen extends Screen {
                     child: ListView(
                       children: state.collections
                           .map((collection) => ListTile(
-                                onTap: () {},
+                                onTap: () => _navigateToCollectionScreen(
+                                    context, collection),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
