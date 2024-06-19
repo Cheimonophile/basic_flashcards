@@ -1,6 +1,6 @@
 import 'package:basic_flashcards/blocs/data/decks/decks_bloc.dart';
-import 'package:basic_flashcards/types/data/collection.dart';
-import 'package:basic_flashcards/types/widgets/screen.dart';
+import 'package:basic_flashcards/models/collection.dart';
+import 'package:basic_flashcards/interfaces/widgets/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -1,5 +1,5 @@
 import 'package:basic_flashcards/repos/collections/collections_repo.dart';
-import 'package:basic_flashcards/types/data/collection.dart';
+import 'package:basic_flashcards/models/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'collections_event.dart';

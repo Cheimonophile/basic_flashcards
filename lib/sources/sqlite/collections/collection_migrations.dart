@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:basic_flashcards/types/sqlite/migration.dart';
+import 'package:basic_flashcards/models/sqlite/migration.dart';
 
 /// number of dummy decks to generate
 const numDecks = 3;

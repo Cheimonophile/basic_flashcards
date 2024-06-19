@@ -1,6 +1,6 @@
 import 'package:basic_flashcards/blocs/data/collections/collections_bloc.dart';
-import 'package:basic_flashcards/types/data/collection.dart';
-import 'package:basic_flashcards/types/widgets/screen.dart';
+import 'package:basic_flashcards/models/collection.dart';
+import 'package:basic_flashcards/interfaces/widgets/screen.dart';
 import 'package:basic_flashcards/utils/file_picker.dart';
 import 'package:basic_flashcards/views/screens/collection/collection_screen.dart';
 import 'package:flutter/material.dart';
