@@ -1,4 +1,4 @@
-import 'package:basic_flashcards/sources/sqlite/collections/collection_db.dart';
+import 'package:basic_flashcards/sources/sqlite/collections/collection_db_dao.dart';
 import 'package:basic_flashcards/sources/sqlite/collections/decks/deck_dao.dart';
 import 'package:basic_flashcards/utils/testing.dart';
 import 'package:flutter_test/flutter_test.dart';

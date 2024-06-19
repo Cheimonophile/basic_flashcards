@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:basic_flashcards/sources/preferences.dart';
-import 'package:basic_flashcards/sources/sqlite/collections/collection_db.dart';
+import 'package:basic_flashcards/sources/sqlite/collections/collection_db_dao.dart';
 import 'package:basic_flashcards/models/collection.dart';
 
 class CollectionsRepo {
