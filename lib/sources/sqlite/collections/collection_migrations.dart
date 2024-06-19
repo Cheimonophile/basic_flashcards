@@ -8,7 +8,7 @@ const numDecks = 3;
 /// number of dummy cards to generate
 const numCards = 10;
 
-final List<Migration> collection_migrations = [
+final List<Migration> collectionMigrations = [
   /// First Version
   Migration(
     up: (txn) async {

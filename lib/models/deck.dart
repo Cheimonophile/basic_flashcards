@@ -3,15 +3,13 @@ typedef DeckId = int;
 /// A deck of cards
 class Deck {
   /// the deck's id
-  ///
-  /// if null, that means the deck doesn't exist in the database and was just created locally
-  final DeckId? id;
+  final DeckId id;
 
   /// the deck's name
   String name;
 
-  Deck({
-    this.id,
+  Deck(
+    this.id, {
     required this.name,
   });
 
@@ -20,7 +18,7 @@ class Deck {
       other is Deck && other.id == id && other.name == name;
 
   @override
-  int get hashCode => id ?? 0;
+  int get hashCode => id;
 
   /// represents the object as a string
   @override
@@ -32,19 +30,19 @@ class Deck {
   factory Deck.fromMap(Map<String, Object?> map) {
     // get the id from the map
     final id = map['id'];
-    if (id is! int?) {
-      throw ArgumentError('id must be an int?');
+    if (id is! int) {
+      throw ArgumentError('Deck id must be an int?');
     }
 
     // get the name from the map
     final name = map['name'];
     if (name is! String) {
-      throw ArgumentError('name must be a string');
+      throw ArgumentError('Deck name must be a string');
     }
 
     // return the deck
     return Deck(
-      id: id,
+      id,
       name: name,
     );
   }

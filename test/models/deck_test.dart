@@ -7,8 +7,8 @@ void main() {
   group('Deck', () {
     // create a list of decks
     final decks = [
-      for (final id in [null, 1])
-        for (final name in ['deck name']) Deck(id: id, name: name)
+      for (final id in [1])
+        for (final name in ['deck name']) Deck(id, name: name)
     ];
     for (final deck in decks) {
       test('Mappable $deck', () {

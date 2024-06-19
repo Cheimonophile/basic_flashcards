@@ -41,6 +41,9 @@ class CollectionDbDao {
     }
   }
 
+  /// open a memory database
+  Future<Database> memory() async => _open(':memory:');
+
   /// delete a collection database
   ///
   /// if the file exists, tries to delete it. Rethrows exceptions from file reading
@@ -57,18 +60,18 @@ class CollectionDbDao {
   Future<Database> _open(String path) async {
     return openDatabase(
       path,
-      version: collection_migrations.length,
+      version: collectionMigrations.length,
       onCreate: (db, version) async {
         await db.transaction((txn) async {
           for (var i = 0; i < version; i++) {
-            await collection_migrations[i].up(txn);
+            await collectionMigrations[i].up(txn);
           }
         });
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         await db.transaction((txn) async {
           for (var i = oldVersion; i < newVersion; i++) {
-            await collection_migrations[i].up(txn);
+            await collectionMigrations[i].up(txn);
           }
         });
       },
