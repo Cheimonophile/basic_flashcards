@@ -7,7 +7,7 @@ class DecksLoad extends DecksEvent {}
 class DecksCreate extends DecksEvent {
   final String name;
 
-  DecksCreate(this.name);
+  DecksCreate({required this.name});
 }
 
 class DecksUpdate extends DecksEvent {

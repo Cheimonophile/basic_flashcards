@@ -13,6 +13,23 @@ class DecksBloc extends Bloc<DecksEvent, DecksState> {
   DecksBloc(Collection collection)
       : _decksRepo = DecksRepo(DecksDao(collection.db)),
         super(DecksLoading()) {
+    on<DecksLoad>(_onDecksLoad);
+    on<DecksCreate>(_onDecksCreate);
 
-        }
+    // initial load
+    add(DecksLoad());
+  }
+
+  /// creates a deck
+  Future<void> _onDecksCreate(DecksCreate event, Emitter<DecksState> emit) async {
+    await _decksRepo.create(name: event.name);
+    final decks = await _decksRepo.reads();
+    emit(DecksLoaded(decks));
+  }
+
+  /// loads decks
+  Future<void> _onDecksLoad(DecksLoad event, Emitter<DecksState> emit) async {
+    final decks = await _decksRepo.reads();
+    emit(DecksLoaded(decks));
+  }
 }
