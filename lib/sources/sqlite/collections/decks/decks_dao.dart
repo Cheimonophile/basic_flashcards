@@ -2,14 +2,14 @@ import 'package:basic_flashcards/models/deck.dart';
 import 'package:sqflite/sqflite.dart';
 
 /// Data Access Object for Decks from a sqlite database
-class DeckDao {
+class DecksDao {
   /// table name for the decks table
   static const table = 'deck';
 
   /// database instance
   final Database _db;
 
-  DeckDao(this._db);
+  DecksDao(this._db);
 
   /// creates a deck in the database
   ///
@@ -42,6 +42,15 @@ class DeckDao {
     } on RangeError catch (_) {
       return null;
     }
+  }
+
+  /// reads decks from the database
+  Future<List<Deck>> reads() async {
+    final results = await _db.transaction((txn) async {
+      return await txn.query(table);
+    });
+    final decks = results.map(Deck.fromMap).toList();
+    return decks;
   }
 
   /// updates a deck in the database

@@ -3,15 +3,15 @@ import 'dart:io';
 import 'package:basic_flashcards/sources/sqlite/collections/collection_migrations.dart';
 import 'package:sqflite/sqflite.dart';
 
-class CollectionDbDao {
-  CollectionDbDao._();
+class CollectionDbsDao {
+  CollectionDbsDao._();
 
   /// singleton instance
-  static CollectionDbDao? _singleton;
+  static CollectionDbsDao? _singleton;
 
   /// singleton factory
-  factory CollectionDbDao() {
-    _singleton ??= CollectionDbDao._();
+  factory CollectionDbsDao() {
+    _singleton ??= CollectionDbsDao._();
     return _singleton!;
   }
 
@@ -49,8 +49,11 @@ class CollectionDbDao {
   /// if the file exists, tries to delete it. Rethrows exceptions from file reading
   ///
   /// if the file doesn't exist, does nothing
-  Future<void> delete(String path) async {
-    final file = File(path);
+  Future<void> delete(Database db) async {
+    final file = File(db.path);
+    if (db.isOpen) {
+      db.close();
+    }
     if (await file.exists()) {
       await file.delete();
     }

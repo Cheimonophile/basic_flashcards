@@ -59,7 +59,7 @@ class HomeScreen extends Screen {
       builder: (context) => CollectionScreen(collection),
     ));
     BlocProvider.of<CollectionsBloc>(context)
-        .add(OpenCollectionsEvent(collection.filePath));
+        .add(OpenCollectionsEvent(collection.path));
   }
 
   @override
@@ -119,7 +119,7 @@ class HomeScreen extends Screen {
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
                                 title: Text(collection.fileName),
-                                subtitle: Text(collection.filePath),
+                                subtitle: Text(collection.path),
                                 trailing: IconButton(
                                     icon: const Icon(Icons.delete),
                                     onPressed: () => _onPressedDeleteCollection(

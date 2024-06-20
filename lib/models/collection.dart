@@ -1,12 +1,14 @@
 import 'dart:io';
 
+import 'package:sqflite/sqflite.dart';
+
 /// Represents a single collection of cards
 class Collection {
-  final File _file;
+  final Database db;
 
-  Collection(this._file);
+  Collection(this.db);
 
-  String get filePath => _file.path;
+  String get path => db.path;
 
-  String get fileName => _file.uri.pathSegments.last;
+  String get fileName => File(db.path).uri.pathSegments.last;
 }
