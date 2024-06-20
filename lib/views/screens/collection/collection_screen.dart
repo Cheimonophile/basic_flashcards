@@ -1,6 +1,7 @@
 import 'package:basic_flashcards/blocs/data/decks/decks_bloc.dart';
 import 'package:basic_flashcards/models/collection.dart';
 import 'package:basic_flashcards/interfaces/widgets/screen.dart';
+import 'package:basic_flashcards/models/deck.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
@@ -14,6 +15,11 @@ class CollectionScreen extends Screen {
   _onPressedAddDeck(BuildContext context) async {
     final deckName = const Uuid().v4();
     context.read<DecksBloc>().add(DecksCreate(name: deckName));
+  }
+
+  /// when the delete deck button is pressed
+  _onPressedDeleteDeck(BuildContext context, Deck deck) async {
+    context.read<DecksBloc>().add(DecksDelete(deck));
   }
 
   @override
@@ -42,6 +48,11 @@ class CollectionScreen extends Screen {
                     return ListTile(
                       title: Text(deck.name),
                       onTap: () => print(deck),
+                      // delete button
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () => _onPressedDeleteDeck(context, deck),
+                      ),
                     );
                   },
                 );
