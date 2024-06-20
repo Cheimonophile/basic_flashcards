@@ -84,7 +84,9 @@ class HomeScreen extends Screen {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                Row(
+                Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
                   children: [
                     // button to add a new collection
                     FilledButton.tonalIcon(
@@ -99,13 +101,7 @@ class HomeScreen extends Screen {
                       icon: const Icon(Icons.open_in_browser),
                       label: const Text("Open Collection"),
                     ),
-                  ]
-                      .map((widget) => Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: widget,
-                          ))
-                      .toList(),
+                  ],
                 ),
                 Expanded(
                   child: Padding(
