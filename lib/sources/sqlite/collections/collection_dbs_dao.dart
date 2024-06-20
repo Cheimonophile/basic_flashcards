@@ -50,12 +50,8 @@ class CollectionDbsDao {
   ///
   /// if the file doesn't exist, does nothing
   Future<void> delete(Database db) async {
-    final file = File(db.path);
     if (db.isOpen) {
       db.close();
-    }
-    if (await file.exists()) {
-      await file.delete();
     }
   }
 
