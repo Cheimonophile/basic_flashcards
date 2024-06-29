@@ -19,7 +19,28 @@ class CollectionScreen extends Screen {
 
   /// when the delete deck button is pressed
   _onPressedDeleteDeck(BuildContext context, Deck deck) async {
-    context.read<DecksBloc>().add(DecksDelete(deck));
+    final decksBloc = context.read<DecksBloc>();
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text("Delete Collection"),
+        content: Text("Are you sure you want to delete deck '${deck.name}'?"),
+        actions: [
+          TextButton(
+            child: const Text("Cancel"),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          TextButton(
+            child: const Text("Delete"),
+            onPressed: () {
+              Navigator.of(context).pop(true);
+              decksBloc.add(DecksDelete(deck));
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override

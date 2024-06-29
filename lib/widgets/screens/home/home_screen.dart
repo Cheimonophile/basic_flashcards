@@ -2,7 +2,7 @@ import 'package:basic_flashcards/blocs/data/collections/collections_bloc.dart';
 import 'package:basic_flashcards/models/collection.dart';
 import 'package:basic_flashcards/interfaces/widgets/screen.dart';
 import 'package:basic_flashcards/utils/file_picker.dart';
-import 'package:basic_flashcards/views/screens/collection/collection_screen.dart';
+import 'package:basic_flashcards/widgets/screens/collection/collection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,6 +32,7 @@ class HomeScreen extends Screen {
     final collectionsBlock = BlocProvider.of<CollectionsBloc>(context);
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: const Text("Delete Collection"),
         content:
