@@ -58,7 +58,7 @@ class CollectionScreen extends Screen {
         builder: (context, decksState) => Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            title: Text("Collection ${collection.fileName}"),
+            title: Text("${collection.fileName} Collection"),
           ),
           body: Builder(
             builder: (context) {
