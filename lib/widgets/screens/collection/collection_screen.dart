@@ -2,9 +2,9 @@ import 'package:basic_flashcards/blocs/data/decks/decks_bloc.dart';
 import 'package:basic_flashcards/models/collection.dart';
 import 'package:basic_flashcards/interfaces/widgets/screen.dart';
 import 'package:basic_flashcards/models/deck.dart';
+import 'package:basic_flashcards/widgets/screens/deck/new_deck_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
 
 class CollectionScreen extends Screen {
   final Collection collection;
@@ -13,8 +13,11 @@ class CollectionScreen extends Screen {
 
   /// when the add deck button is pressed
   _onPressedAddDeck(BuildContext context) async {
-    final deckName = const Uuid().v4();
-    context.read<DecksBloc>().add(DecksCreate(name: deckName));
+    final decksBloc = context.read<DecksBloc>();
+    Navigator.of(context).push(NewDeckScreen(
+      decksBloc: decksBloc,
+    ).route);
+    print("Add Deck");
   }
 
   /// when the delete deck button is pressed
@@ -34,7 +37,7 @@ class CollectionScreen extends Screen {
           TextButton(
             child: const Text("Delete"),
             onPressed: () {
-              Navigator.of(context).pop(true);
+              Navigator.of(context).pop();
               decksBloc.add(DecksDelete(deck));
             },
           ),

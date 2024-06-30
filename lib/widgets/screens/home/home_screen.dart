@@ -45,7 +45,7 @@ class HomeScreen extends Screen {
           TextButton(
             child: const Text("Delete"),
             onPressed: () {
-              Navigator.of(context).pop(true);
+              Navigator.of(context).pop();
               collectionsBlock.add(DeleteCollectionsEvent(collection));
             },
           ),
@@ -56,9 +56,7 @@ class HomeScreen extends Screen {
 
   /// navigate to the collection screen
   _navigateToCollectionScreen(BuildContext context, Collection collection) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => CollectionScreen(collection),
-    ));
+    Navigator.of(context).push(CollectionScreen(collection).route);
     BlocProvider.of<CollectionsBloc>(context)
         .add(OpenCollectionsEvent(collection.path));
   }
