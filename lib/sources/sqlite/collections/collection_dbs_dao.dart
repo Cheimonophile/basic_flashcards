@@ -60,6 +60,9 @@ class CollectionDbsDao {
     return openDatabase(
       path,
       version: collectionMigrations.length,
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON');
+      },
       onCreate: (db, version) async {
         await db.transaction((txn) async {
           for (var i = 0; i < version; i++) {

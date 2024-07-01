@@ -16,6 +16,9 @@ void main() {
         final db = await openDatabase(
           'file:memdb$version?mode=memory&cache=shared',
           version: version,
+          onConfigure: (db) async {
+            await db.execute('PRAGMA foreign_keys = ON');
+          },
           onCreate: (db, version) async {
             await db.transaction((txn) async {
               for (var i = 1; i <= version; i++) {
