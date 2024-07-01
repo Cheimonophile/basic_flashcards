@@ -3,15 +3,15 @@ import 'dart:io';
 import 'package:basic_flashcards/sources/sqlite/collections/collection_migrations.dart';
 import 'package:sqflite/sqflite.dart';
 
-class CollectionDbDao {
-  CollectionDbDao._();
+class CollectionDbsDao {
+  CollectionDbsDao._();
 
   /// singleton instance
-  static CollectionDbDao? _singleton;
+  static CollectionDbsDao? _singleton;
 
   /// singleton factory
-  factory CollectionDbDao() {
-    _singleton ??= CollectionDbDao._();
+  factory CollectionDbsDao() {
+    _singleton ??= CollectionDbsDao._();
     return _singleton!;
   }
 
@@ -41,15 +41,17 @@ class CollectionDbDao {
     }
   }
 
+  /// open a memory database
+  Future<Database> memory() async => _open(':memory:');
+
   /// delete a collection database
   ///
   /// if the file exists, tries to delete it. Rethrows exceptions from file reading
   ///
   /// if the file doesn't exist, does nothing
-  Future<void> delete(String path) async {
-    final file = File(path);
-    if (await file.exists()) {
-      await file.delete();
+  Future<void> delete(Database db) async {
+    if (db.isOpen) {
+      db.close();
     }
   }
 
@@ -57,18 +59,21 @@ class CollectionDbDao {
   Future<Database> _open(String path) async {
     return openDatabase(
       path,
-      version: collection_migrations.length,
+      version: collectionMigrations.length,
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON');
+      },
       onCreate: (db, version) async {
         await db.transaction((txn) async {
           for (var i = 0; i < version; i++) {
-            await collection_migrations[i].up(txn);
+            await collectionMigrations[i].up(txn);
           }
         });
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         await db.transaction((txn) async {
           for (var i = oldVersion; i < newVersion; i++) {
-            await collection_migrations[i].up(txn);
+            await collectionMigrations[i].up(txn);
           }
         });
       },

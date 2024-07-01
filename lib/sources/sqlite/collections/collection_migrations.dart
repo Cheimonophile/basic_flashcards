@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:basic_flashcards/types/sqlite/migration.dart';
+import 'package:basic_flashcards/models/sqlite/migration.dart';
 
 /// number of dummy decks to generate
 const numDecks = 3;
@@ -8,7 +8,7 @@ const numDecks = 3;
 /// number of dummy cards to generate
 const numCards = 10;
 
-final List<Migration> collection_migrations = [
+final List<Migration> collectionMigrations = [
   /// First Version
   Migration(
     up: (txn) async {

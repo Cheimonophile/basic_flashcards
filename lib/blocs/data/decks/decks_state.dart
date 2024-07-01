@@ -2,18 +2,18 @@ part of 'decks_bloc.dart';
 
 abstract class DecksState {}
 
-class LoadingDecksState extends DecksState {}
+class DecksLoading extends DecksState {}
 
-class ErrorDecksState extends DecksState {
-  final String message;
+class DecksLoadingFailed extends DecksState {
+  final Exception exception;
 
-  ErrorDecksState(this.message);
+  DecksLoadingFailed(this.exception);
 }
 
-class LoadedDecksState extends DecksState {
+class DecksLoaded extends DecksState {
   final List<Deck> _decks;
 
-  LoadedDecksState(this._decks);
+  DecksLoaded(this._decks);
 
   List<Deck> get decks => List.unmodifiable(_decks);
 }
